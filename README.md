@@ -1,7 +1,84 @@
-# CarND-Controls-PID
+# CarND-PID-Control-Project
+
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+[image0]: ./imgs/Capture2.jpg 
+
+This repository contains implementation of PID controller that derives steering angle for a car given the error from the center of the track as an input
+
+
+## Background
+
+One of the basic implementation of a control systems in motors, robotics and moving objects in a control system is the Proportional (P), Differential (D), Integral (I), controller(PID). PID controller is the most popular controller and is used in applications across domains. 
+
+
+## Working of PID Controller
+
+The basic principle of working of a PID controller is a minimization of the total error problem in a given system. This error is minimised through 3 main parameter the each of the P, I and D components contributes in dealing with a certain type of error and all of the 3 completes each other. These components are described as below:
+
+  1. Proportional (P) component:
+    Mathematically, the P component compensates for the current error value to get back on track. The value of P component is given by the formula:
+    
+    Proportional error = -Kp * error
+    
+    
+  2. Differential (D) component:
+    Mathematically, the D component compensates for the sudden changes of the error which minimizes the uncertainty in the system. The value of D component is given by the formula:
+    
+    Diffrential error = -Kd * d(error)/dt
+    
+    
+  3. Integral (D) component:
+    Mathematically, the I component compensates for the value of systemic bias error in the system. The value of I component is given by the formula:
+    
+    Integral error = -Ki * SUM( error)
+    
+  When all components are used, the mathematical equation is given by:
+  
+    Error = (-Kp * error) + (-Kd * d(error)/dt) + (Ki * SUM( error))
+  
+  where, Error is the control input to the system, often known as the **actuator** input.
+  
+
+## Project Goal
+
+In this project, a PID controller was implemented to drive a car around circular track having sharp left and right turns with varrying the velocity. The PID aims to keep the car stay in the center of the lane and take smooth left and right turns without running over the edges of the lane.
+
+The simulator used can be found here at [Udacity's self driving car simulator](https://github.com/udacity/self-driving-car-sim/releases). 
+
+The simulator measured the cross track error (cte) between the lateral position of car and the center of the lane. This error was communicated to C++ code with the help of [uWebSockets library](https://github.com/uNetworking/uWebSockets). The cte was then used by the PID controller governing the steering angle of the car.
+
+The final implementation consisted of following major steps:
+
+  1. Calculating the steering angle according to the cte given by implementing the PID controller Algorithm.
+  
+  2. Setting initial starting values for the PID controller by firstly switching off the I and D components and only the P component was used to drive the car. This was done by setting the Ki and Kd parameters to 0. The car was allowed to drive along the track. The value of Kp was tuned manually to help the car stay on the track as much as possible without much of deviations then selecting intial values for the I and D components accordingly.
+  
+  3. Optimizing the PID controller parameters using Twiddle
+  
+  
+  6. Gain parameters were then fine-tuned by Twiddle algorithm where the manual tuned values from step 2 were taken as a starting point. Each of the gain parameters Kp, Ki and Kd were tuned one at a time to optimize the algorithm, the car was driven only for 200 time steps after which the simulator was reset to bring back the car in original starting position. Few results obtained while fine tuning are given below:
+
+  Final values of tuned parameters after using Twiddle for parameter optimization  
+ **Fine tuning of parameters using twiddle**
+  
+| parameter | Starting point    | After twiddle   | 
+|:---------:|:-----------------:|:---------------:| 
+| Kp        | 6.0e-2               | 1.6e-1          | 
+| Ki        | 3.0e-4               | 6.76e-4         |
+| Kd        | 1.3               | 4.34            |
+  -----------------------------------------------------------------------------------
+
+  
+## Results
+
+PID controller that is used to derive the steering angles for a car moving on a circular track was implemented successfully. The car could stay close to the center of the lane and take smooth left and right turns along its path.
+
+![][image0]
+
+## Steps for building the project
+
 
 ## Dependencies
 
